@@ -1,0 +1,64 @@
+<body>
+<div class="main"*ngFor="let customer of customers">
+  <mat-card class="cards">
+    <!--<mat-card-title>HOME DEPOT</mat-card-title>-->
+    <div class="container">
+      <mat-icon class="person">person_pin</mat-icon>
+      <mat-card-content>
+        <div id="content-div">
+          <h1>{{customer.firstName | uppercase}} {{customer.lastName | uppercase}}</h1>
+
+          <div *ngIf="!customer.updateClicked; else update">
+
+                      <div *ngIf="!customer.masked; else masker">
+                        <div>
+                          <mat-icon class="contact"> contact_mail</mat-icon><span class="aligned-with-icon">{{customer.contact ? customer.contact.email : ""}}</span>
+                        </div>
+                        <div>
+                          <mat-icon class="contact"> contact_phone</mat-icon><span class="aligned-with-icon">{{customer.contact ? customer.contact.phone : ""}}</span>
+                        </div>
+                      </div>
+
+                      <ng-template #masker>
+                        <div>
+                          <mat-icon class="contact"> contact_mail</mat-icon><span class="aligned-with-icon">{{this.maskedCustomer.contact ? maskedCustomer.contact.email : "-"}}</span>
+                        </div>
+                        <div>
+                          <mat-icon class="contact"> contact_phone</mat-icon><span class="aligned-with-icon">{{this.maskedCustomer.contact ? maskedCustomer.contact.phone : "-"}}</span>
+                        </div>
+                      </ng-template>
+
+          </div>
+
+          <ng-template #update>
+            <div>
+              <mat-icon class="contact"> contact_mail</mat-icon><input class="aligned-with-icon" value="{{customer.contact ? customer.contact.email : ''}}" (blur)="onEmailChange($event)">
+            </div>
+            <div>
+              <mat-icon class="contact"> contact_phone</mat-icon><input class="aligned-with-icon" value="{{customer.contact ? customer.contact.phone : ''}}" (blur)="onPhoneChange($event)">
+            </div>
+          </ng-template>
+
+          <mat-slide-toggle class="controls" color="primary" (change)="onMaskSelection($event, customer.id)" labelPosition="before" >Mask Contact Info.</mat-slide-toggle>
+        </div>
+
+
+
+      </mat-card-content>
+
+    </div>
+
+    <mat-card-actions>
+      <div class="controls">
+        <span *ngIf="!customer.updateClicked; else performUpdate">
+          <button mat-stroked-button class="controls" color="warn" (click)="onUpdateClick(customer.id)">Update Contact Info.</button>
+        </span>
+        <ng-template #performUpdate>
+          <button mat-raised-button class="controls" color="warn" (click)="onUpdate(customer.id)">Update</button>
+        </ng-template>
+      </div>
+    </mat-card-actions>
+
+  </mat-card>
+</div>
+</body>
